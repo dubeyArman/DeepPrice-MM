@@ -78,7 +78,7 @@ col_widths = [Inches(3.2), Inches(3.2)]
 
 # Row 0: Headers
 hdr_cells = info_table.rows[0].cells
-hdr_cells[0].text = "PROJECT TEAM MEMBERS"
+hdr_cells[0].text = "PROJECT TEAM & ENROLLMENT"
 hdr_cells[1].text = "CORE SYSTEM METRICS & TECH STACK"
 for c in hdr_cells:
     set_cell_background(c, "0F172A")
@@ -97,7 +97,7 @@ r = p0.add_run("• Arman Dubey — S25CSEU1315\n")
 r.font.bold = True
 r.font.size = Pt(10.5)
 r.font.color.rgb = RGBColor(15, 23, 42)
-r2 = p0.add_run("• Darshan Pingale — S25CSEU1307")
+r2 = p0.add_run("• Darshan Pingale — S25CSE1307")
 r2.font.bold = True
 r2.font.size = Pt(10.5)
 r2.font.color.rgb = RGBColor(37, 99, 235)
@@ -312,7 +312,7 @@ doc.add_paragraph().paragraph_format.space_after = Pt(14)
 footer_p = doc.add_paragraph()
 footer_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
 r_foot = footer_p.add_run(
-    "DeepPrice-MM Project Report • Team: Arman Dubey (S25CSEU1315) & Darshan Pingale (S25CSEU1307)\n"
+    "DeepPrice-MM Project Report • Team: Arman Dubey (S25CSEU1315) & Darshan Pingale (S25CSE1307)\n"
     "GitHub Repository: https://github.com/dubeyArman/DeepPrice-MM"
 )
 r_foot.font.name = "Arial"

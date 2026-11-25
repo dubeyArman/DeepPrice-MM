@@ -2,7 +2,7 @@
 
 **Multimodal Dynamic Pricing Engine with Cross-Modal Attention Fusion & Monotonic Demand Constraints**
 
-- **Project Team Members:** Arman Dubey (S25CSEU1315) & Darshan Pingale (S25CSEU1307)
+- **Project Team & Enrollment:** Arman Dubey (S25CSEU1315) & Darshan Pingale (S25CSE1307)
 - **GitHub Repository:** [https://github.com/dubeyArman/DeepPrice-MM](https://github.com/dubeyArman/DeepPrice-MM)
 - **Tech Stack:** PyTorch 2.x • Sentence-BERT • ResNet-18 • FastAPI • Bootstrap 5 • Chart.js
 - **Milestone Metric:** **15.1% MAPE** | **R² = 0.6084** (49.3% error reduction over tabular baseline)

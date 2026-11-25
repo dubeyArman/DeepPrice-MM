@@ -229,9 +229,9 @@ DeepPrice-MM/
 
 ---
 
-## 👥 Project Team Members
+## 👥 Project Team & Enrollment
 
 - **Arman Dubey** — Enrollment: **S25CSEU1315**
-- **Darshan Pingale** — Enrollment: **S25CSEU1307**
+- **Darshan Pingale** — Enrollment: **S25CSE1307**
 - **GitHub:** [@dubeyArman](https://github.com/dubeyArman)
 - **Domain:** Multimodal Deep Learning, E-Commerce Pricing Intelligence, Microeconomic Optimization

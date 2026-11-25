@@ -229,9 +229,9 @@ REPORT_HTML_CONTENT = f"""<!DOCTYPE html>
     </div>
     <div class="meta-grid">
       <div class="meta-item">
-        <div class="meta-label">Project Team Members</div>
-        <div class="meta-val" style="font-size: 9.5pt;">Arman Dubey (S25CSEU1315)</div>
-        <div class="meta-val" style="font-size: 9.5pt; color: #60a5fa;">Darshan Pingale (S25CSEU1307)</div>
+        <div class="meta-label">Project Team &amp; Enrollment</div>
+        <div class="meta-val" style="font-size: 9.5pt;">Arman Dubey — S25CSEU1315</div>
+        <div class="meta-val" style="font-size: 9.5pt; color: #60a5fa;">Darshan Pingale — S25CSE1307</div>
       </div>
       <div class="meta-item">
         <div class="meta-label">Core Tech Stack</div>
@@ -468,7 +468,7 @@ REPORT_HTML_CONTENT = f"""<!DOCTYPE html>
   </div>
 
   <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid #cbd5e1; font-size: 8.5pt; color: #64748b; text-align: center;">
-    DeepPrice-MM Project Report &bull; GitHub Repository: https://github.com/dubeyArman/DeepPrice-MM &bull; Team: Arman Dubey (S25CSEU1315) &amp; Darshan Pingale (S25CSEU1307)
+    DeepPrice-MM Project Report &bull; GitHub Repository: https://github.com/dubeyArman/DeepPrice-MM &bull; Team: Arman Dubey (S25CSEU1315) &amp; Darshan Pingale (S25CSE1307)
   </div>
 
 </body>
@@ -498,7 +498,7 @@ REPORT_MD_CONTENT = """# DeepPrice-MM: Comprehensive Project & Technical Evaluat
 
 **Multimodal Dynamic Pricing Engine with Cross-Modal Attention Fusion & Monotonic Demand Constraints**
 
-- **Project Team Members:** Arman Dubey (S25CSEU1315) & Darshan Pingale (S25CSEU1307)
+- **Project Team & Enrollment:** Arman Dubey (S25CSEU1315) & Darshan Pingale (S25CSE1307)
 - **GitHub Repository:** [https://github.com/dubeyArman/DeepPrice-MM](https://github.com/dubeyArman/DeepPrice-MM)
 - **Tech Stack:** PyTorch 2.x • Sentence-BERT • ResNet-18 • FastAPI • Bootstrap 5 • Chart.js
 - **Milestone Metric:** **15.1% MAPE** | **R² = 0.6084** (49.3% error reduction over tabular baseline)
