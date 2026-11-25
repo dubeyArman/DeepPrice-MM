@@ -24,17 +24,15 @@ To prevent non-monotonic neural hallucinations, DeepPrice-MM implements an **Eco
 
 ---
 
-## 📁 PPT AND REPORT (Presentations & Technical Reports)
+## 📁 PPT AND REPORT (Presentation & Report)
 
-All summarized presentation decks and project evaluation reports are organized in the [`PPT AND REPORT/`](./PPT%20AND%20REPORT/) folder:
+The dedicated [`PPT AND REPORT/`](./PPT%20AND%20REPORT/) folder contains:
 
-| Asset | Format | Scope | Link |
-| :--- | :---: | :---: | :--- |
-| **Summarized Presentation (8 Slides Max)** | `.pptx` | **8 Slides** | [**`DeepPrice_MM_Summarized_Presentation.pptx`**](./PPT%20AND%20REPORT/DeepPrice_MM_Summarized_Presentation.pptx) |
-| **Comprehensive Technical Project Report** | `PDF` | Full Report | [**`DeepPrice_Multimodal_Dynamic_Pricing_Project_Report.pdf`**](./PPT%20AND%20REPORT/DeepPrice_Multimodal_Dynamic_Pricing_Project_Report.pdf) |
-| **Markdown Technical Project Report** | `Markdown` | GitHub Native | [**`PROJECT_REPORT.md`**](./PPT%20AND%20REPORT/PROJECT_REPORT.md) |
-| **Master Technical Presentation** | `.pptx` | 14 Slides | [**`DeepPrice_Multimodal_Dynamic_Pricing_Presentation.pptx`**](./PPT%20AND%20REPORT/DeepPrice_Multimodal_Dynamic_Pricing_Presentation.pptx) |
-| **Master Model Architecture Documentation** | `PDF` | PDF | [**`DeepPrice_Master_Model_Documentation.pdf`**](./PPT%20AND%20REPORT/DeepPrice_Master_Model_Documentation.pdf) |
+| File | Type | Description | Link |
+| :--- | :---: | :--- | :--- |
+| **`DeepPrice_8_Slides_Presentation.pptx`** | **Presentation** | **Summarized 8-Slide Presentation Deck** covering problem statement, tri-modal architecture, attention fusion, dataset, monotonic elasticity, 15.1% MAPE ablation benchmark, web app, and viva defense. | [**View PPTX**](./PPT%20AND%20REPORT/DeepPrice_8_Slides_Presentation.pptx) |
+| **`DeepPrice_Project_Report.pdf`** | **Report (PDF)** | **Comprehensive Technical Project Report** formatted and styled with architecture diagrams, formulas, 4-model benchmarks, Pearson heatmap, and viva Q&A. | [**Download PDF**](./PPT%20AND%20REPORT/DeepPrice_Project_Report.pdf) |
+| **`README.md`** | **Report (Markdown)** | Full readable GitHub-native technical project report rendered directly on GitHub. | [**Read Online**](./PPT%20AND%20REPORT/README.md) |
 
 ---
 
