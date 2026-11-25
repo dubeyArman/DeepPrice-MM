@@ -1,0 +1,38 @@
+{
+  "dataset_source": "Flipkart Real E-Commerce Product Catalog (Web Data)",
+  "dataset_size": 1200,
+  "test_size": 180,
+  "metrics": {
+    "proposed_multimodal": {
+      "R2_Score": 0.6084,
+      "RMSE": 207.58,
+      "MAE": 127.81,
+      "MAPE_pct": 15.11
+    },
+    "baseline_tabular_only": {
+      "R2_Score": 0.6675,
+      "RMSE": 191.27,
+      "MAE": 160.37,
+      "MAPE_pct": 16.88
+    },
+    "baseline_text_tabular": {
+      "R2_Score": 0.6134,
+      "RMSE": 206.24,
+      "MAE": 158.64,
+      "MAPE_pct": 18.54
+    },
+    "baseline_vision_tabular": {
+      "R2_Score": 0.5414,
+      "RMSE": 224.63,
+      "MAE": 177.36,
+      "MAPE_pct": 19.45
+    }
+  },
+  "revenue_optimization": {
+    "static_total_revenue_inr": 126034267.38,
+    "optimized_total_revenue_inr": 154998815.8,
+    "revenue_lift_pct": 22.98,
+    "average_recommended_price": 1286.98,
+    "average_msrp": 1680.33
+  }
+}

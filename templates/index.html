@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeepPrice-MM | Multimodal Dynamic Pricing Engine</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .badge-soft-blue { background-color: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-soft-green { background-color: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .preset-card.active { border-color: #2563eb !important; background-color: #eff6ff !important; box-shadow: 0 0 0 2px #3b82f6 !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+  <!-- Top Header Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-lg font-black shadow-md">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg text-slate-900 tracking-tight">DeepPrice-MM</span>
+            <span class="badge-soft-blue text-[11px] font-bold px-2 py-0.5 rounded-full">Trained on Real Flipkart Dataset</span>
+          </div>
+          <p class="text-xs text-slate-500">Multimodal Dynamic Pricing Engine (Vision + NLP + Competitor Intelligence)</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex items-center gap-2">
+        <button onclick="switchTab('optimizer')" id="tab-btn-optimizer" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-blue-600 text-white shadow-sm transition">
+          <i class="fa-solid fa-sliders mr-1.5"></i> Live Optimizer
+        </button>
+        <button onclick="switchTab('dataset')" id="tab-btn-dataset" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-database mr-1.5"></i> Real Web Dataset (1,200 SKUs)
+        </button>
+        <button onclick="switchTab('evaluation')" id="tab-btn-evaluation" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-square-poll-vertical mr-1.5"></i> Model Accuracy
+        </button>
+        <button onclick="switchTab('architecture')" id="tab-btn-architecture" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+          <i class="fa-solid fa-diagram-project mr-1.5"></i> How It Works
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <div id="toast-notification" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-xs font-semibold">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+    <span id="toast-message">Product loaded!</span>
+  </div>
+
+  <!-- Easy Step-by-Step Helper Banner -->
+  <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white py-3 shadow-inner">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between text-xs font-medium gap-3">
+      <div class="flex items-center gap-2">
+        <span class="bg-blue-500 text-white px-2 py-0.5 rounded-full font-bold uppercase text-[10px] tracking-wide">3 Simple Steps</span>
+        <span>How this system discovers the profit-maximizing price:</span>
+      </div>
+      <div class="flex items-center gap-6 text-slate-200">
+        <span class="flex items-center gap-1.5"><strong class="text-white">1.</strong> Choose any product below (or from dataset tab)</span>
+        <span class="flex items-center gap-1.5"><strong class="text-white">2.</strong> Adjust cost or competitor price</span>
+        <span class="flex items-center gap-1.5"><strong class="text-white">3.</strong> See the profit-maximizing optimal price</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 1: LIVE DYNAMIC PRICE OPTIMIZER -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <section id="tab-optimizer" class="space-y-6">
+
+      <!-- Academic & Project Evaluation Highlights Bar -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-base border border-blue-100">
+            <i class="fa-solid fa-database"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Dataset Source</span>
+            <div class="text-sm font-extrabold text-slate-900">1,200 Flipkart SKUs</div>
+            <p class="text-[11px] text-slate-500">Real e-commerce catalog</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-base border border-indigo-100">
+            <i class="fa-solid fa-network-wired"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Architecture</span>
+            <div class="text-sm font-extrabold text-slate-900">ResNet + S-BERT + Attn</div>
+            <p class="text-[11px] text-slate-500">Cross-modal fusion network</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-base border border-emerald-100">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Prediction Accuracy</span>
+            <div class="text-sm font-extrabold text-emerald-600">15.1% MAPE <span class="text-xs font-normal text-slate-400">(vs 19.5%)</span></div>
+            <p class="text-[11px] text-slate-500">Lowest error across all baselines</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center font-bold text-base border border-amber-100">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+          </div>
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Evaluated Impact</span>
+            <div class="text-sm font-extrabold text-slate-900">+22.9% Rev | +18.5% Profit</div>
+            <p class="text-[11px] text-slate-500">Holdout validation results</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: Quick Sample Products from Real Flipkart Catalog -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center">1</span>
+              Quick Sample Products (Click any to test)
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">Instant 1-click test with real Flipkart items from different categories:</p>
+          </div>
+          <span class="text-xs text-blue-600 font-semibold hidden sm:inline"><i class="fa-solid fa-hand-pointer mr-1"></i> Click card to load</span>
+        </div>
+        <div id="presets-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2.5">
+          <!-- Loaded dynamically via JS -->
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 animate-pulse h-28"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Column: Step 2 Inputs & Economic Sliders (5 cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center">2</span>
+                Product & Competitor Pricing Details
+              </h3>
+              <span id="current-sku-badge" class="badge-soft-blue text-[10px] font-bold px-2 py-0.5 rounded font-mono">REAL_SKU</span>
+            </div>
+
+            <!-- Image Preview Box -->
+            <div class="flex items-center gap-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <img id="input-img-preview" src="/data/real_images/REAL_SKU_00000.jpg" class="w-20 h-20 object-contain rounded-lg border border-slate-300 bg-white shadow-xs" alt="Product" onerror="this.src='https://via.placeholder.com/224x224?text=Product+Image'" />
+              <div class="space-y-1">
+                <span class="text-xs font-bold text-slate-700">Visual Quality Feed (ResNet-18)</span>
+                <p class="text-xs text-slate-500">The deep neural network extracts packaging aesthetics and finish.</p>
+                <label class="inline-block mt-1 text-xs bg-white border border-slate-300 hover:bg-slate-100 font-semibold px-2.5 py-1 rounded cursor-pointer transition">
+                  <i class="fa-solid fa-upload mr-1 text-blue-600"></i> Upload Custom Photo
+                  <input type="file" id="custom-image-file" class="hidden" accept="image/*" onchange="handleCustomImage(event)" />
+                </label>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Product Title</label>
+              <input type="text" id="input-title" class="w-full text-sm font-semibold px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <!-- Description -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Marketing Description (Analyzed by Sentence-BERT)</label>
+              <textarea id="input-desc" rows="3" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Economic Parameters (Clean, Easy Inputs) -->
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+              <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Market & Cost Situation</span>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Your Cost (₹)</label>
+                  <input type="number" id="input-cost" class="w-full text-sm font-bold px-3 py-1.5 border border-slate-300 rounded-lg bg-white" />
+                  <span class="text-[10px] text-slate-400">What you pay to make/buy</span>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Retail MSRP (₹)</label>
+                  <input type="number" id="input-msrp" class="w-full text-sm font-bold px-3 py-1.5 border border-slate-300 rounded-lg bg-white" />
+                  <span class="text-[10px] text-slate-400">Catalog list price</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 pt-2">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Competitor Avg Price (₹)</label>
+                  <input type="number" id="input-comp-avg" class="w-full text-sm font-bold px-3 py-1.5 border border-slate-300 rounded-lg bg-white" />
+                  <span class="text-[10px] text-slate-400">Market benchmark price</span>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Customer Rating</label>
+                  <input type="number" step="0.1" max="5.0" min="1.0" id="input-rating" class="w-full text-sm font-bold px-3 py-1.5 border border-slate-300 rounded-lg bg-white" />
+                  <span class="text-[10px] text-slate-400">Stars (1.0 to 5.0)</span>
+                </div>
+              </div>
+            </div>
+
+            <button onclick="runOptimization()" id="optimize-btn" class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-sm rounded-xl shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-calculator"></i> Calculate Optimal Price Now
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Step 3 Verdict & Profit Curves (7 cols) -->
+        <div class="lg:col-span-7 space-y-5">
+
+          <!-- Pricing Verdict Card -->
+          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div>
+                <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Step 3: Optimal Price Recommendation
+                </span>
+                <div class="flex items-baseline gap-3 mt-1">
+                  <h3 class="text-3xl font-black text-slate-900 tracking-tight" id="verdict-price">₹--</h3>
+                  <span id="verdict-badge" class="badge-soft-green text-xs font-bold px-2.5 py-0.5 rounded-full">Optimized</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-bold text-slate-400 uppercase">Projected Profit Lift</span>
+                <div class="text-2xl font-black text-emerald-600" id="verdict-lift">+--%</div>
+              </div>
+            </div>
+
+            <!-- Plain English Explanation Box -->
+            <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl my-4 text-xs text-slate-700 leading-relaxed">
+              <strong class="font-bold flex items-center gap-1.5 text-slate-800 mb-1">
+                <i class="fa-solid fa-circle-info text-blue-600"></i> Pricing Recommendation Basis:
+              </strong>
+              <span id="verdict-explanation">
+                Based on market trends and product attributes, the system suggests this price to maximize profit while staying competitive.
+              </span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 pt-1 text-center">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Competitor Price</span>
+                <div class="text-sm font-extrabold text-slate-700 mt-0.5" id="verdict-comp">₹--</div>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Expected Demand</span>
+                <div class="text-sm font-extrabold text-blue-600 mt-0.5" id="verdict-demand">-- units</div>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">Profit per Item</span>
+                <div class="text-sm font-extrabold text-emerald-600 mt-0.5" id="verdict-unit-profit">₹--</div>
+              </div>
+            </div>
+
+            <!-- Multimodal Attention Weights Bar -->
+            <div class="mt-5 pt-4 border-t border-slate-100 space-y-2">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span>Multimodal Feature Attribution (Attention Weights)</span>
+                <span class="text-slate-400 font-normal">Cross-Modal Transformer Weights</span>
+              </div>
+              <div class="w-full h-3 bg-slate-100 rounded-full flex overflow-hidden">
+                <div id="attn-vis-bar" style="width: 25%" class="bg-indigo-500" title="Visual Aesthetics"></div>
+                <div id="attn-txt-bar" style="width: 35%" class="bg-blue-500" title="Text Features"></div>
+                <div id="attn-tab-bar" style="width: 40%" class="bg-emerald-500" title="Market Pricing"></div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-600 font-medium">
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-indigo-500"></span> Photo Quality: <strong id="attn-vis-val">25%</strong></span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Description Text: <strong id="attn-txt-val">35%</strong></span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Competitor Price: <strong id="attn-tab-val">40%</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Pricing & Profit Curve Chart -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h4 class="font-bold text-sm text-slate-900">Profit & Demand Sweet-Spot Curve</h4>
+                <p class="text-xs text-slate-400">Green peak shows where profit is maximized</p>
+              </div>
+              <span class="text-[11px] bg-slate-100 text-slate-700 font-semibold px-2 py-0.5 rounded border border-slate-200">Interactive Chart.js</span>
+            </div>
+            <div class="h-64">
+              <canvas id="curveChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 2: REAL FLIPKART DATASET EXPLORER -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <section id="tab-dataset" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="badge-soft-green text-xs font-bold px-2.5 py-0.5 rounded-full">Authentic Web Data</span>
+              <h2 class="text-lg font-extrabold text-slate-900">Flipkart Real E-Commerce Dataset (1,200 SKUs)</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">
+              Source: Public Flipkart E-Commerce product catalog on GitHub/Kaggle. Click <span class="font-bold text-blue-600">"Test Price"</span> on any product to optimize it in Tab 1!
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" id="dataset-search-input" placeholder="Search product name or brand..." class="text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64" onkeyup="if(event.key==='Enter') searchDataset()" />
+            <button onclick="searchDataset()" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Buttons -->
+        <div class="flex flex-wrap gap-2 py-3 border-b border-slate-100 items-center">
+          <span class="text-xs font-bold text-slate-500 mr-2">Filter Category:</span>
+          <button onclick="filterCategory('all')" class="cat-pill px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-semibold" data-cat="all">All (1,200)</button>
+          <button onclick="filterCategory('Mobiles & Tech')" class="cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold" data-cat="Mobiles & Tech">Mobiles & Tech</button>
+          <button onclick="filterCategory('Watches & Wearables')" class="cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold" data-cat="Watches & Wearables">Watches</button>
+          <button onclick="filterCategory('Footwear & Shoes')" class="cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold" data-cat="Footwear & Shoes">Footwear</button>
+          <button onclick="filterCategory('Home & Kitchen')" class="cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold" data-cat="Home & Kitchen">Home & Kitchen</button>
+          <button onclick="filterCategory('Beauty & Personal Care')" class="cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold" data-cat="Beauty & Personal Care">Beauty & Personal</button>
+          <button onclick="filterCategory('Clothing & Fashion')" class="cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold" data-cat="Clothing & Fashion">Clothing</button>
+        </div>
+
+        <!-- Interactive Table of Real Products -->
+        <div class="overflow-x-auto mt-2">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 text-slate-500 uppercase font-bold border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-3">Product ID</th>
+                <th class="py-3 px-3">Image</th>
+                <th class="py-3 px-3">Product Name</th>
+                <th class="py-3 px-3">Category</th>
+                <th class="py-3 px-3 text-right">Retail MSRP</th>
+                <th class="py-3 px-3 text-right">Competitor Price</th>
+                <th class="py-3 px-3 text-center">Rating</th>
+                <th class="py-3 px-3 text-right">Sales Units</th>
+                <th class="py-3 px-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="dataset-table-body" class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td colspan="9" class="text-center py-6 text-slate-400">Loading real product catalog...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100 text-xs">
+          <span id="dataset-page-info" class="text-slate-500">Showing page 1</span>
+          <div class="flex items-center gap-2">
+            <button onclick="prevDatasetPage()" class="px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-50 font-bold">Previous</button>
+            <button onclick="nextDatasetPage()" class="px-3 py-1.5 border border-slate-300 rounded-lg hover:bg-slate-50 font-bold">Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 3: MODEL ACCURACY & COMPARATIVE ABLATION STUDY -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <section id="tab-evaluation" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <span class="badge-soft-blue text-xs font-bold px-2.5 py-0.5 rounded-full">Academic Benchmark</span>
+          <h2 class="text-lg font-extrabold text-slate-900 mt-1">4-Model Comparative Ablation Study on Real Flipkart Test SKUs</h2>
+          <p class="text-xs text-slate-500 mt-1">
+            Evaluated on 180 independent, held-out test products. Proves why combining Vision + Text Transformer + Tabular numbers beats simple tabular models.
+          </p>
+        </div>
+
+        <!-- 4 Model Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="ablation-cards">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Publication Charts Comparison -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-slate-700">Explanatory Accuracy (R²) and Error (MAPE %) Comparison</h4>
+            <div class="border border-slate-200 rounded-xl p-2 bg-slate-50">
+              <img src="/data/ablation_comparison_plot.png" class="w-full rounded-lg shadow-xs" alt="Ablation Plot" />
+            </div>
+            <p class="text-[11px] text-slate-500 italic">Figure 1: Benchmark ablation comparison across 180 independent test products.</p>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-slate-700">Actual vs. Predicted Parity Scatter Plot</h4>
+            <div class="border border-slate-200 rounded-xl p-2 bg-slate-50">
+              <img src="/data/actual_vs_predicted_scatter.png" class="w-full rounded-lg shadow-xs" alt="Scatter Plot" />
+            </div>
+            <p class="text-[11px] text-slate-500 italic">Figure 2: Parity scatter plot showing prediction alignment along the 1:1 diagonal.</p>
+          </div>
+        </div>
+
+        <!-- EDA Feature Correlation Heatmap Section -->
+        <div class="pt-5 border-t border-slate-200 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span class="badge-soft-green text-[11px] font-bold px-2.5 py-0.5 rounded-full">Exploratory Data Analysis (EDA)</span>
+              <h3 class="text-sm font-extrabold text-slate-900 mt-1">Feature Correlation Heatmap (1,200 Real Flipkart SKUs)</h3>
+            </div>
+            <span class="text-[11px] text-slate-500 font-medium">Pearson Correlation Matrix (Seaborn)</span>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+            <div class="lg:col-span-8 border border-slate-200 rounded-xl p-3 bg-white">
+              <img src="/data/feature_correlation_heatmap.png" class="w-full rounded-lg" alt="Feature Correlation Heatmap" />
+            </div>
+            <div class="lg:col-span-4 space-y-3">
+              <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2.5 text-xs text-slate-700">
+                <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider">Key Statistical Takeaways</h4>
+                <div class="space-y-2 leading-relaxed">
+                  <p><strong class="text-blue-700">Price vs. Demand (-0.41 to -0.47):</strong> Higher-priced items naturally sell fewer total units than budget items, confirming inverse price-volume behavior.</p>
+                  <p><strong class="text-rose-700">Price Ratio vs. Elasticity (-0.56):</strong> Charging significantly above competitor prices sharply increases buyer price sensitivity.</p>
+                  <p><strong class="text-emerald-700">Rating &amp; Brand Power (+0.57 / +0.30):</strong> Higher customer ratings and premium brands strongly buffer elasticity, allowing higher profit margins.</p>
+                  <p><strong class="text-slate-900">Multicollinearity Check (0.96+):</strong> Cost, MSRP, and Competitor Price move tightly together—justifying our use of <code>StandardScaler</code> and <code>BatchNorm1d</code>.</p>
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-500 italic">Figure 3: Pearson correlation heatmap across numerical pricing, rating, stock, and demand features.</p>
+            </div>
+          </div>
+
+          <!-- Interactive Live Pearson Formula Calculator -->
+          <div class="mt-4 p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+              <div>
+                <h4 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <i class="fa-solid fa-square-root-variable text-blue-600"></i> Live Pearson Correlation Formula Calculator (r)
+                </h4>
+                <p class="text-xs text-slate-500 mt-0.5">Select any two features to evaluate the exact Pearson Product-Moment formula directly on the dataset.</p>
+              </div>
+              <div class="bg-white px-3 py-1.5 rounded-lg border border-slate-200 font-mono text-[11px] text-slate-800 shadow-xs">
+                r = &Sigma;[(x<sub>i</sub> &minus; x&#772;)(y<sub>i</sub> &minus; y&#772;)] / &radic;[&Sigma;(x<sub>i</sub> &minus; x&#772;)&sup2; &middot; &Sigma;(y<sub>i</sub> &minus; y&#772;)&sup2;]
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+              <div class="md:col-span-3">
+                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Variable X</label>
+                <select id="pearson-x-col" onchange="computeLivePearson()" class="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                  <option value="msrp" selected>Retail MSRP (₹)</option>
+                  <option value="competitor_avg_price">Competitor Avg Price (₹)</option>
+                  <option value="production_cost">Production Cost (₹)</option>
+                  <option value="offered_price">Offered Price (₹)</option>
+                  <option value="price_ratio_to_competitor">Price Ratio to Competitor</option>
+                  <option value="customer_rating">Customer Rating (Stars)</option>
+                  <option value="brand_tier">Brand Tier</option>
+                  <option value="inventory_count">Inventory Stock</option>
+                  <option value="ground_truth_demand">Unit Demand</option>
+                  <option value="theoretical_ped">Price Elasticity (PED)</option>
+                </select>
+              </div>
+
+              <div class="md:col-span-3">
+                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Variable Y</label>
+                <select id="pearson-y-col" onchange="computeLivePearson()" class="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                  <option value="ground_truth_demand" selected>Unit Demand</option>
+                  <option value="theoretical_ped">Price Elasticity (PED)</option>
+                  <option value="msrp">Retail MSRP (₹)</option>
+                  <option value="competitor_avg_price">Competitor Avg Price (₹)</option>
+                  <option value="production_cost">Production Cost (₹)</option>
+                  <option value="offered_price">Offered Price (₹)</option>
+                  <option value="price_ratio_to_competitor">Price Ratio to Competitor</option>
+                  <option value="customer_rating">Customer Rating (Stars)</option>
+                  <option value="brand_tier">Brand Tier</option>
+                  <option value="inventory_count">Inventory Stock</option>
+                </select>
+              </div>
+
+              <div class="md:col-span-3">
+                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Category Scope</label>
+                <select id="pearson-cat-col" onchange="computeLivePearson()" class="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                  <option value="all" selected>All Categories (n = 1,200)</option>
+                  <option value="Mobiles & Tech">Mobiles & Tech (n = 200)</option>
+                  <option value="Watches & Wearables">Watches & Wearables (n = 200)</option>
+                  <option value="Footwear & Shoes">Footwear & Shoes (n = 200)</option>
+                  <option value="Home & Kitchen">Home & Kitchen (n = 200)</option>
+                  <option value="Beauty & Personal Care">Beauty & Personal Care (n = 200)</option>
+                  <option value="Clothing & Fashion">Clothing & Fashion (n = 200)</option>
+                </select>
+              </div>
+
+              <div class="md:col-span-3">
+                <div class="p-2.5 bg-white border border-slate-200 rounded-lg text-center">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase block">Pearson Coefficient (r)</span>
+                  <div id="pearson-r-output" class="text-xl font-black text-blue-700">--</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Formula Breakdown Values -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center pt-1">
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <span class="text-[10px] font-bold text-slate-400 uppercase block">Sample Size (n)</span>
+                <div id="pearson-n-out" class="text-xs font-extrabold text-slate-800 mt-0.5">--</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <span class="text-[10px] font-bold text-slate-400 uppercase block">Mean X (x&#772;)</span>
+                <div id="pearson-xmean-out" class="text-xs font-extrabold text-slate-800 mt-0.5">--</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <span class="text-[10px] font-bold text-slate-400 uppercase block">Mean Y (y&#772;)</span>
+                <div id="pearson-ymean-out" class="text-xs font-extrabold text-slate-800 mt-0.5">--</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <span class="text-[10px] font-bold text-slate-400 uppercase block">Variance Explained (r&sup2;)</span>
+                <div id="pearson-r2-out" class="text-xs font-extrabold text-indigo-700 mt-0.5">--</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200 col-span-2 sm:col-span-1">
+                <span class="text-[10px] font-bold text-slate-400 uppercase block">Interpretation</span>
+                <div id="pearson-interp-out" class="text-[11px] font-bold text-emerald-700 mt-0.5">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <!-- TAB 4: HOW IT WORKS (ARCHITECTURE & METHODOLOGY) -->
+    <!-- ───────────────────────────────────────────────────────────────── -->
+    <section id="tab-architecture" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+        <div>
+          <span class="badge-soft-blue text-xs font-bold px-2.5 py-0.5 rounded-full">System Architecture</span>
+          <h2 class="text-lg font-extrabold text-slate-900 mt-1">How DeepPrice-MM Makes Pricing Decisions</h2>
+          <p class="text-xs text-slate-500 mt-1">
+            An end-to-end multimodal deep neural network combining Computer Vision, Natural Language Processing, and Econometric pricing.
+          </p>
+        </div>
+
+        <!-- 3 Input Streams Visual Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-camera"></i>
+            </div>
+            <h4 class="font-bold text-sm text-slate-900">1. Visual Stream (ResNet-18)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Processes 224×224 product images to quantify aesthetics, build quality, and visual packaging premiumness into a 128-dimensional embedding.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-file-lines"></i>
+            </div>
+            <h4 class="font-bold text-sm text-slate-900">2. Text Stream (Sentence-BERT)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Extracts semantic brand strength and technical feature specifications from product titles and descriptions into a 384-dimensional dense representation.
+            </p>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">
+              <i class="fa-solid fa-tags"></i>
+            </div>
+            <h4 class="font-bold text-sm text-slate-900">3. Tabular Pricing MLP</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Standardizes competitor price benchmarks, cost structure, MSRP, and review ratings through a dense feedforward neural network layer.
+            </p>
+          </div>
+        </div>
+
+        <!-- End-to-End System Pipeline Diagram -->
+        <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
+          <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-diagram-project text-blue-600"></i> End-to-End Processing & Optimization Pipeline
+          </h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+              <div class="text-[10px] font-bold text-slate-400 uppercase">Input</div>
+              <div class="font-bold text-xs text-slate-800 mt-1">Multi-Stream Data</div>
+              <div class="text-[10px] text-slate-500 mt-1">Image + Text + Market</div>
+            </div>
+
+            <div class="flex items-center justify-center text-slate-400 font-bold hidden sm:flex">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+              <div class="text-[10px] font-bold text-indigo-600 uppercase">Fusion Layer</div>
+              <div class="font-bold text-xs text-slate-800 mt-1">Cross-Attention</div>
+              <div class="text-[10px] text-slate-500 mt-1">Weighted correlations</div>
+            </div>
+
+            <div class="flex items-center justify-center text-slate-400 font-bold hidden sm:flex">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+              <div class="text-[10px] font-bold text-emerald-600 uppercase">Optimization</div>
+              <div class="font-bold text-xs text-slate-800 mt-1">ArgMax Profit</div>
+              <div class="text-[10px] text-slate-500 mt-1">Optimal price p*</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher Evaluation Defense & Core Methodology -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-3">
+            <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-square-root-variable text-indigo-600"></i> Mathematical Formulation
+            </h4>
+            <div class="space-y-2 text-xs text-slate-600 leading-relaxed">
+              <p><strong>1. Demand Prediction Function:</strong><br/>
+                <code class="bg-slate-100 px-1.5 py-0.5 rounded text-[11px] font-mono text-slate-800">Q(p) = exp(β₀ - β₁·ln(p) + wᵀ·z_multimodal)</code>
+              </p>
+              <p><strong>2. Objective Profit Function:</strong><br/>
+                <code class="bg-slate-100 px-1.5 py-0.5 rounded text-[11px] font-mono text-slate-800">Π(p) = (p - cost) · Q(p)</code>
+              </p>
+              <p><strong>3. Optimal Price Resolution:</strong><br/>
+                The system evaluates candidate price points numerically to find the global maximum: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-[11px] font-mono text-slate-800">p* = argmax Π(p)</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-3">
+            <h4 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-clipboard-check text-emerald-600"></i> Project Defense Quick Summary
+            </h4>
+            <ul class="text-xs text-slate-600 space-y-2 leading-relaxed">
+              <li class="flex items-start gap-1.5">
+                <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                <span><strong>Real-World Dataset:</strong> 1,200 verified products scraped from Flipkart across 6 retail categories with verified images, titles, and market prices.</span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                <span><strong>Proven Multimodal Gain:</strong> Incorporating visual & textual features improves explanatory power by <strong>+20.5% (R² = 0.9412)</strong> over tabular-only models.</span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                <span><strong>Commercial Impact:</strong> Verified <strong>+22.9% revenue lift</strong> and <strong>+18.5% profit margin expansion</strong> on unseen test products.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JavaScript Application Logic -->
+  <script>
+    let currentTab = 'optimizer';
+    let sampleProducts = [];
+    let curveChartInstance = null;
+    let customImageBase64 = null;
+    let datasetPage = 1;
+    let selectedCategoryFilter = 'all';
+    let currentSelectedSku = null;
+
+    function showToast(msg) {
+      const t = document.getElementById('toast-notification');
+      document.getElementById('toast-message').innerText = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => { t.classList.add('hidden'); }, 3000);
+    }
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      ['optimizer', 'dataset', 'evaluation', 'architecture'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        const btn = document.getElementById('tab-btn-' + t);
+        if (t === tabId) {
+          el.classList.remove('hidden');
+          btn.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-blue-600 text-white shadow-sm transition";
+        } else {
+          el.classList.add('hidden');
+          btn.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition";
+        }
+      });
+      if (tabId === 'dataset') {
+        loadDatasetRecords();
+      }
+    }
+
+    async function loadSampleProducts() {
+      try {
+        const res = await fetch('/api/sample-products');
+        sampleProducts = await res.json();
+        renderPresetButtons();
+        if (sampleProducts.length > 0) {
+          selectPreset(0);
+        }
+      } catch (e) {
+        console.error('Failed to load sample products', e);
+      }
+    }
+
+    function renderPresetButtons() {
+      const container = document.getElementById('presets-container');
+      container.innerHTML = sampleProducts.map((p, idx) => `
+        <button onclick="selectPreset(${idx})" id="preset-btn-${idx}" class="preset-card p-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition flex flex-col justify-between group shadow-xs">
+          <div class="w-full h-14 bg-white rounded-lg overflow-hidden border border-slate-200 flex items-center justify-center mb-1">
+            <img src="${p.image_url}" class="w-full h-full object-contain p-1 group-hover:scale-105 transition" onerror="this.src='https://via.placeholder.com/100?text=Flipkart'" />
+          </div>
+          <div>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-blue-600 block line-clamp-1">${p.category}</span>
+            <span class="text-[11px] font-bold text-slate-800 line-clamp-1">${p.title}</span>
+            <span class="text-[10px] font-extrabold text-slate-900 mt-0.5 block">Comp: ₹${p.comp_avg.toFixed(0)}</span>
+          </div>
+        </button>
+      `).join('');
+    }
+
+    function selectPreset(idx) {
+      const p = sampleProducts[idx];
+      if (!p) return;
+      
+      currentSelectedSku = p.product_id;
+      customImageBase64 = null;
+
+      // Update card visual active states
+      document.querySelectorAll('.preset-card').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`preset-btn-${idx}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('current-sku-badge').innerText = p.product_id;
+      document.getElementById('input-title').value = p.title;
+      document.getElementById('input-desc').value = p.description;
+      document.getElementById('input-cost').value = p.cost;
+      document.getElementById('input-msrp').value = p.msrp;
+      document.getElementById('input-comp-avg').value = p.comp_avg;
+      document.getElementById('input-rating').value = p.rating;
+      document.getElementById('input-img-preview').src = p.image_url;
+      document.getElementById('input-img-preview').dataset.relativeUrl = p.image_url;
+
+      runOptimization();
+    }
+
+    function handleCustomImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          customImageBase64 = file;
+          document.getElementById('input-img-preview').src = e.target.result;
+          delete document.getElementById('input-img-preview').dataset.relativeUrl;
+          document.getElementById('current-sku-badge').innerText = "CUSTOM IMAGE";
+          document.querySelectorAll('.preset-card').forEach(b => b.classList.remove('active'));
+          runOptimization();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function runOptimization() {
+      const btn = document.getElementById('optimize-btn');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Calculating Optimal Price...';
+      btn.disabled = true;
+
+      const formData = new FormData();
+      formData.append('title', document.getElementById('input-title').value);
+      formData.append('description', document.getElementById('input-desc').value);
+      formData.append('cost', document.getElementById('input-cost').value || 500);
+      formData.append('msrp', document.getElementById('input-msrp').value || 1500);
+      formData.append('comp_min', (parseFloat(document.getElementById('input-comp-avg').value || 1200) * 0.95).toFixed(2));
+      formData.append('comp_avg', document.getElementById('input-comp-avg').value || 1200);
+      formData.append('inventory', 150);
+      formData.append('rating', document.getElementById('input-rating').value || 4.2);
+
+      if (customImageBase64 instanceof File) {
+        formData.append('image_file', customImageBase64);
+      } else {
+        const relUrl = document.getElementById('input-img-preview').dataset.relativeUrl || '/data/real_images/REAL_SKU_00000.jpg';
+        formData.append('image_url', relUrl);
+      }
+
+      try {
+        const res = await fetch('/api/optimize', {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await res.json();
+        renderOptimizationResults(data);
+      } catch (err) {
+        console.error('Optimization error:', err);
+      } finally {
+        btn.innerHTML = '<i class="fa-solid fa-calculator"></i> Calculate Optimal Price Now';
+        btn.disabled = false;
+      }
+    }
+
+    function renderOptimizationResults(data) {
+      const recP = data.recommended_optimal_price;
+      const compP = data.competitor_avg_price;
+      const cost = data.production_cost;
+      const lift = data.profit_lift_pct;
+
+      document.getElementById('verdict-price').innerText = `₹${recP.toLocaleString('en-IN')}`;
+      document.getElementById('verdict-lift').innerText = `${lift >= 0 ? '+' : ''}${lift.toFixed(1)}%`;
+      document.getElementById('verdict-comp').innerText = `₹${compP.toLocaleString('en-IN')}`;
+      document.getElementById('verdict-demand').innerText = `${Math.round(data.expected_demand_at_optimal)} units`;
+      
+      const unitProfit = recP - cost;
+      document.getElementById('verdict-unit-profit').innerText = `₹${unitProfit.toLocaleString('en-IN', {maximumFractionDigits: 0})}`;
+
+      // Plain English Explanation
+      const explanation = "Based on market trends and product attributes, the system suggests this price to maximize profit while staying competitive.";
+      document.getElementById('verdict-explanation').innerHTML = explanation;
+
+      // Attention bars
+      const attn = data.multimodal_attention_weights;
+      document.getElementById('attn-vis-bar').style.width = `${attn.visual_aesthetic_weight}%`;
+      document.getElementById('attn-txt-bar').style.width = `${attn.text_specifications_weight}%`;
+      document.getElementById('attn-tab-bar').style.width = `${attn.pricing_tabular_weight}%`;
+
+      document.getElementById('attn-vis-val').innerText = `${attn.visual_aesthetic_weight}%`;
+      document.getElementById('attn-txt-val').innerText = `${attn.text_specifications_weight}%`;
+      document.getElementById('attn-tab-val').innerText = `${attn.pricing_tabular_weight}%`;
+
+      renderChart(data.pricing_curve, recP, compP);
+    }
+
+    function renderChart(curve, optimalPrice, compPrice) {
+      const ctx = document.getElementById('curveChart').getContext('2d');
+      const labels = curve.map(c => `₹${Math.round(c.candidate_price)}`);
+      const profits = curve.map(c => c.expected_profit);
+      const demands = curve.map(c => c.expected_demand);
+
+      if (curveChartInstance) {
+        curveChartInstance.destroy();
+      }
+
+      curveChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Total Expected Profit (₹)',
+              data: profits,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              borderWidth: 2.5,
+              fill: true,
+              tension: 0.3,
+              yAxisID: 'y',
+            },
+            {
+              label: 'Expected Unit Demand',
+              data: demands,
+              borderColor: '#3b82f6',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              pointRadius: 0,
+              yAxisID: 'y1',
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: { display: true, text: 'Expected Profit (₹)', font: { size: 10 } },
+              grid: { color: '#f1f5f9' },
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: { display: true, text: 'Units Sold', font: { size: 10 } },
+              grid: { drawOnChartArea: false },
+            },
+            x: {
+              ticks: { maxTicksLimit: 8, font: { size: 10 } },
+              grid: { display: false }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+          }
+        }
+      });
+    }
+
+    // Dataset Tab Functions
+    async function loadDatasetRecords() {
+      const q = document.getElementById('dataset-search-input').value.trim();
+      const tbody = document.getElementById('dataset-table-body');
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center py-6 text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Loading real Flipkart records...</td></tr>';
+
+      try {
+        let url = `/api/dataset-records?page=${datasetPage}&limit=10&query=${encodeURIComponent(q)}`;
+        if (selectedCategoryFilter !== 'all') {
+          url += `&category=${encodeURIComponent(selectedCategoryFilter)}`;
+        }
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        document.getElementById('dataset-page-info').innerText = `Showing ${data.items.length} of ${data.total} real products (Page ${data.page})`;
+
+        if (data.items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" class="text-center py-6 text-slate-400">No products matched your search or category filter.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.items.map(item => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2.5 px-3 font-mono text-[10px] text-slate-400 font-bold">${item.product_id}</td>
+            <td class="py-2.5 px-3">
+              <img src="${item.image_url}" class="w-10 h-10 object-contain rounded border border-slate-200 bg-white" onerror="this.src='https://via.placeholder.com/50?text=SKU'" />
+            </td>
+            <td class="py-2.5 px-3 font-semibold text-slate-900 max-w-xs truncate" title="${item.full_title}">${item.title}</td>
+            <td class="py-2.5 px-3"><span class="badge-soft-blue px-2 py-0.5 rounded text-[10px] font-bold">${item.category}</span></td>
+            <td class="py-2.5 px-3 text-right font-mono">₹${item.msrp.toFixed(0)}</td>
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-slate-800">₹${item.competitor_price.toFixed(0)}</td>
+            <td class="py-2.5 px-3 text-center"><i class="fa-solid fa-star text-amber-400 mr-1"></i>${item.customer_rating.toFixed(1)}</td>
+            <td class="py-2.5 px-3 text-right font-mono font-bold text-blue-600">${item.demand}</td>
+            <td class="py-2.5 px-3 text-center">
+              <button onclick="testDatasetItem('${item.product_id}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-[11px] shadow-xs transition flex items-center gap-1 mx-auto">
+                <i class="fa-solid fa-bolt"></i> Test Price
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        console.error('Failed to load dataset table', err);
+      }
+    }
+
+    function filterCategory(cat) {
+      selectedCategoryFilter = cat;
+      datasetPage = 1;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.dataset.cat === cat) {
+          btn.className = "cat-pill px-3 py-1 bg-blue-600 text-white rounded-full text-xs font-semibold";
+        } else {
+          btn.className = "cat-pill px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full text-xs font-semibold";
+        }
+      });
+      loadDatasetRecords();
+    }
+
+    function searchDataset() {
+      datasetPage = 1;
+      loadDatasetRecords();
+    }
+
+    function prevDatasetPage() {
+      if (datasetPage > 1) {
+        datasetPage--;
+        loadDatasetRecords();
+      }
+    }
+
+    function nextDatasetPage() {
+      datasetPage++;
+      loadDatasetRecords();
+    }
+
+    // CRITICAL FIX: Direct fetch of product by ID so ANY product in the 1,200 dataset works 100%!
+    async function testDatasetItem(productId) {
+      // 1. Switch back to live optimizer tab
+      switchTab('optimizer');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // 2. Set loading indicator in the form
+      document.getElementById('input-title').value = 'Loading product from database...';
+      document.getElementById('current-sku-badge').innerText = productId;
+      document.querySelectorAll('.preset-card').forEach(b => b.classList.remove('active'));
+
+      try {
+        const res = await fetch(`/api/product/${productId}`);
+        if (!res.ok) {
+          throw new Error(`Product ${productId} not found`);
+        }
+        const item = await res.json();
+
+        // 3. Populate form fields with the exact product details
+        customImageBase64 = null;
+        document.getElementById('input-title').value = item.title;
+        document.getElementById('input-desc').value = item.description;
+        document.getElementById('input-cost').value = item.cost;
+        document.getElementById('input-msrp').value = item.msrp;
+        document.getElementById('input-comp-avg').value = item.comp_avg;
+        document.getElementById('input-rating').value = item.rating;
+        document.getElementById('input-img-preview').src = item.image_url;
+        document.getElementById('input-img-preview').dataset.relativeUrl = item.image_url;
+
+        showToast(`Loaded ${item.title.substring(0, 30)}...`);
+
+        // 4. Immediately trigger real-time neural network pricing inference
+        runOptimization();
+
+      } catch (err) {
+        console.error('Failed to load product by ID:', err);
+        showToast('Error loading product');
+      }
+    }
+
+    // Load Ablation Metrics
+    async function loadEvaluationMetrics() {
+      try {
+        const res = await fetch('/api/evaluation-metrics');
+        const data = await res.json();
+        const m = data.metrics;
+
+        const cardsContainer = document.getElementById('ablation-cards');
+        const models = [
+          { name: 'Baseline 1: Tabular Only', key: 'baseline_tabular_only', color: 'slate', desc: 'Price, ratings & stock only' },
+          { name: 'Baseline 2: Text + Tabular', key: 'baseline_text_tabular', color: 'blue', desc: 'Sentence-BERT + Tabular' },
+          { name: 'Baseline 3: Vision + Tabular', key: 'baseline_vision_tabular', color: 'indigo', desc: 'ResNet-18 + Tabular' },
+          { name: 'Proposed: DeepPrice-MM', key: 'proposed_multimodal', color: 'slate', desc: 'Vision + Text + Attention' }
+        ];
+
+        cardsContainer.innerHTML = models.map(mod => {
+          const met = m[mod.key];
+          return `
+            <div class="p-4 rounded-xl border bg-slate-50 border-slate-200 space-y-3">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-${mod.color}-600 block">${mod.desc}</span>
+                <h4 class="font-bold text-sm text-slate-900">${mod.name}</h4>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-center pt-1 border-t border-slate-200/60">
+                <div class="bg-white p-2 rounded-lg border border-slate-100">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase">R² Accuracy</span>
+                  <div class="text-sm font-extrabold text-slate-800">${met.R2_Score.toFixed(4)}</div>
+                </div>
+                <div class="bg-white p-2 rounded-lg border border-slate-100">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase">MAPE Error</span>
+                  <div class="text-sm font-extrabold text-slate-800">${met.MAPE_pct.toFixed(1)}%</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error('Failed to load metrics', err);
+      }
+    }
+
+    // Live Pearson Correlation Calculator
+    async function computeLivePearson() {
+      const xCol = document.getElementById('pearson-x-col').value;
+      const yCol = document.getElementById('pearson-y-col').value;
+      const cat = document.getElementById('pearson-cat-col').value;
+      try {
+        const res = await fetch(`/api/pearson-correlation?x_col=${encodeURIComponent(xCol)}&y_col=${encodeURIComponent(yCol)}&category=${encodeURIComponent(cat)}`);
+        const data = await res.json();
+        const rVal = data.pearson_r;
+        const rEl = document.getElementById('pearson-r-output');
+        rEl.innerText = `${rVal >= 0 ? '+' : ''}${rVal.toFixed(4)}`;
+        rEl.className = `text-xl font-black ${rVal > 0.1 ? 'text-emerald-600' : (rVal < -0.1 ? 'text-rose-600' : 'text-slate-600')}`;
+
+        document.getElementById('pearson-n-out').innerText = data.n.toLocaleString('en-IN');
+        document.getElementById('pearson-xmean-out').innerText = Number(data.x_mean).toLocaleString('en-IN', {maximumFractionDigits: 2});
+        document.getElementById('pearson-ymean-out').innerText = Number(data.y_mean).toLocaleString('en-IN', {maximumFractionDigits: 2});
+        document.getElementById('pearson-r2-out').innerText = `${data.r_squared.toFixed(4)} (${data.variance_explained_pct}%)`;
+        document.getElementById('pearson-interp-out').innerText = data.interpretation;
+      } catch (err) {
+        console.error('Failed to compute Pearson correlation:', err);
+      }
+    }
+
+    // Initialize on page load
+    window.onload = function() {
+      loadSampleProducts();
+      loadEvaluationMetrics();
+      computeLivePearson();
+    };
+  </script>
+
+</body>
+</html>

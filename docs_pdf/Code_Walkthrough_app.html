@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Walkthrough: app.py</title>
+  <style>
+    
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 9pt;
+    color: #64748b;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1e293b;
+  line-height: 1.6;
+  font-size: 10pt;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 { color: #0f172a; font-weight: 800; margin-top: 1.4em; margin-bottom: 0.5em; page-break-after: avoid; }
+h1 { font-size: 20pt; line-height: 1.2; border-bottom: 2px solid #2563eb; padding-bottom: 6px; }
+h2 { font-size: 14pt; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; color: #1e3a8a; }
+h3 { font-size: 11.5pt; color: #2563eb; }
+h4 { font-size: 10.5pt; color: #334155; }
+
+p { margin-top: 0; margin-bottom: 0.8em; }
+
+.header-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  padding: 20px 24px;
+  border-radius: 10px;
+  margin-bottom: 22px;
+}
+.header-banner h1 { color: #ffffff; border: none; margin: 0 0 6px 0; padding: 0; font-size: 19pt; }
+.header-banner p { color: #cbd5e1; margin: 0; font-size: 10pt; }
+.header-banner .badge-row { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.header-banner .badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px 0;
+  font-size: 9pt;
+  page-break-inside: avoid;
+}
+.table-custom th, .table-custom td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  text-align: left;
+}
+.table-custom th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+}
+.table-custom tr:nth-child(even) { background-color: #f8fafc; }
+
+.callout {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 14px 0;
+  border-left: 4px solid;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+.callout-info { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; }
+.callout-viva { background: #fefce8; border-color: #eab308; color: #713f12; }
+.callout-success { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
+.callout-danger { background: #fef2f2; border-color: #dc2626; color: #991b1b; }
+
+.callout-title {
+  font-weight: 800;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  font-size: 8.5pt;
+  letter-spacing: 0.5px;
+}
+
+pre, code {
+  font-family: 'Fira Code', Consolas, monospace;
+}
+code {
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  font-size: 8.5pt;
+  border: 1px solid #e2e8f0;
+}
+pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 8.2pt;
+  overflow-x: auto;
+  line-height: 1.45;
+  margin: 12px 0 16px 0;
+  page-break-inside: avoid;
+  border: 1px solid #334155;
+}
+
+.code-title {
+  background: #1e293b;
+  color: #94a3b8;
+  font-family: 'Fira Code', monospace;
+  font-size: 8pt;
+  padding: 4px 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-bottom: -12px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.card {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.viva-term {
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+}
+.viva-term strong {
+  color: #9a3412;
+  font-size: 9.5pt;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.viva-qa {
+  border-left: 3px solid #6366f1;
+  background: #f8fafc;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 0 6px 6px 0;
+  page-break-inside: avoid;
+}
+.viva-qa .q { font-weight: 700; color: #1e1b4b; margin-bottom: 4px; }
+.viva-qa .a { color: #334155; font-size: 9pt; }
+
+.page-break { page-break-before: always; }
+
+  </style>
+</head>
+<body>
+  
+<div class="header-banner">
+  <h1>Code Walkthrough: app.py</h1>
+  <p>FastAPI High-Performance Asynchronous Web Server & Interactive REST APIs</p>
+  <div class="badge-row">
+    <span class="badge">FastAPI</span>
+    <span class="badge">ASGI Framework</span>
+    <span class="badge">REST Endpoints</span>
+    <span class="badge">Uvicorn</span>
+  </div>
+</div>
+
+<h2>1. File Purpose & Role</h2>
+<p>
+  This script serves as the <strong>backend API server and web application host</strong>. Built on modern FastAPI, it serves the interactive frontend dashboard, handles asynchronous multipart file uploads (custom photos), runs real-time pricing inferences, and serves searchable database queries across the 1,200 Flipkart SKUs.
+</p>
+
+<h2>2. Libraries Used and Technical Justification</h2>
+<table class="table-custom">
+  <thead>
+    <tr>
+      <th>Library</th>
+      <th>Imported Items</th>
+      <th>Purpose in Script</th>
+      <th>Why Chosen Over Alternatives</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>fastapi</code></td>
+      <td><code>FastAPI, UploadFile, File, Form, HTTPException, Query</code></td>
+      <td>Building high-performance REST API endpoints with automatic request validation.</td>
+      <td>~3-5x faster than Flask; built natively on Python type hints and ASGI asynchronous event loops.</td>
+    </tr>
+    <tr>
+      <td><code>fastapi.staticfiles</code></td>
+      <td><code>StaticFiles</code></td>
+      <td>Serving static media (product photos and evaluation plots) directly from the <code>data/</code> folder.</td>
+      <td>High-efficiency file streaming directly integrated into FastAPI.</td>
+    </tr>
+    <tr>
+      <td><code>fastapi.middleware.cors</code></td>
+      <td><code>CORSMiddleware</code></td>
+      <td>Enabling Cross-Origin Resource Sharing for modern browser clients.</td>
+      <td>Prevents browser CORS security blocks when accessing REST endpoints.</td>
+    </tr>
+    <tr>
+      <td><code>pandas</code></td>
+      <td><code>import pandas as pd</code></td>
+      <td>Querying, filtering, and paginating the 1,200 product records for the dataset explorer tab.</td>
+      <td>Fast in-memory filtering by category and search strings.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3. Detailed Block-by-Block Code Walkthrough</h2>
+
+<div class="card">
+  <div class="code-title">app.py (Lines 117-140)</div>
+  <pre><code>@app.get("/api/product/{product_id}")
+def get_product_by_id(product_id: str):
+    df = pd.read_csv(CSV_PATH)
+    matches = df[df["product_id"].astype(str) == product_id.strip()]
+    if len(matches) == 0:
+        raise HTTPException(status_code=404, detail="Product ID not found")
+    row = matches.iloc[0]
+    return { ... product details, image URL, costs, prices ... }</code></pre>
+  <p><strong>Explanation:</strong> This is the critical endpoint that powers the "Test Price" feature in Tab 2. When a user clicks "Test Price" on any of the 1,200 products in the dataset table, this endpoint retrieves the exact authentic specifications, image, and competitor prices for instant loading into the optimizer.</p>
+</div>
+
+<div class="card" style="margin-top: 14px;">
+  <div class="code-title">app.py (Lines 206-250)</div>
+  <pre><code>@app.post("/api/optimize")
+async def optimize_price(
+    title: str = Form(...),
+    cost: float = Form(...),
+    comp_avg: float = Form(...),
+    image_file: UploadFile = File(None),
+    image_url: str = Form(None),
+):
+    opt = get_optimizer() # Singleton pattern
+    # Handles either uploaded custom image or dataset image URL
+    result = opt.optimize(...)
+    return result</code></pre>
+  <p><strong>Explanation:</strong> The primary optimization endpoint. It accepts both standard form fields and multipart image uploads. Uses a singleton pattern (<code>get_optimizer()</code>) to ensure neural network weights are loaded into memory once on startup rather than reloaded on every HTTP request.</p>
+</div>
+
+<h2>4. Important Viva Terms to Highlight</h2>
+<div class="viva-term">
+  <strong>ASGI vs WSGI</strong>
+  <span>FastAPI is an Asynchronous Server Gateway Interface (ASGI) framework, allowing it to handle concurrent user requests without blocking, whereas legacy Flask (WSGI) is synchronous.</span>
+</div>
+<div class="viva-term">
+  <strong>Singleton Pattern</strong>
+  <span>A design pattern that restricts instantiation of a class to a single instance. In <code>app.py</code>, <code>get_optimizer()</code> loads the heavy PyTorch model weights once into memory on server start, preventing memory exhaustion.</span>
+</div>
+
+<h2>5. Likely Viva Questions & Answers</h2>
+<div class="viva-qa">
+  <div class="q">Q: Why did you use FastAPI instead of Flask or Django?</div>
+  <div class="a">A: FastAPI is significantly faster, natively supports asynchronous file uploads (`UploadFile`), automatically validates request data types with Pydantic, and provides instant OpenAPI documentation.</div>
+</div>
+
+</body>
+</html>

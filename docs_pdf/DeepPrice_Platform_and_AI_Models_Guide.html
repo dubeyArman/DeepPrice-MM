@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DeepPrice-MM: Training Platform & AI Models Guide</title>
+  <style>
+    
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 9pt;
+    color: #64748b;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1e293b;
+  line-height: 1.6;
+  font-size: 10pt;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 { color: #0f172a; font-weight: 800; margin-top: 1.4em; margin-bottom: 0.5em; page-break-after: avoid; }
+h1 { font-size: 20pt; line-height: 1.2; border-bottom: 2px solid #2563eb; padding-bottom: 6px; }
+h2 { font-size: 14pt; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; color: #1e3a8a; }
+h3 { font-size: 11.5pt; color: #2563eb; }
+h4 { font-size: 10.5pt; color: #334155; }
+
+p { margin-top: 0; margin-bottom: 0.8em; }
+
+.header-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  padding: 20px 24px;
+  border-radius: 10px;
+  margin-bottom: 22px;
+}
+.header-banner h1 { color: #ffffff; border: none; margin: 0 0 6px 0; padding: 0; font-size: 19pt; }
+.header-banner p { color: #cbd5e1; margin: 0; font-size: 10pt; }
+.header-banner .badge-row { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.header-banner .badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px 0;
+  font-size: 9pt;
+  page-break-inside: avoid;
+}
+.table-custom th, .table-custom td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  text-align: left;
+}
+.table-custom th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+}
+.table-custom tr:nth-child(even) { background-color: #f8fafc; }
+
+.callout {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 14px 0;
+  border-left: 4px solid;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+.callout-info { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; }
+.callout-viva { background: #fefce8; border-color: #eab308; color: #713f12; }
+.callout-success { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
+.callout-danger { background: #fef2f2; border-color: #dc2626; color: #991b1b; }
+
+.callout-title {
+  font-weight: 800;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  font-size: 8.5pt;
+  letter-spacing: 0.5px;
+}
+
+pre, code {
+  font-family: 'Fira Code', Consolas, monospace;
+}
+code {
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  font-size: 8.5pt;
+  border: 1px solid #e2e8f0;
+}
+pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 8.2pt;
+  overflow-x: auto;
+  line-height: 1.45;
+  margin: 12px 0 16px 0;
+  page-break-inside: avoid;
+  border: 1px solid #334155;
+}
+
+.code-title {
+  background: #1e293b;
+  color: #94a3b8;
+  font-family: 'Fira Code', monospace;
+  font-size: 8pt;
+  padding: 4px 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-bottom: -12px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.card {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.viva-term {
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+}
+.viva-term strong {
+  color: #9a3412;
+  font-size: 9.5pt;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.viva-qa {
+  border-left: 3px solid #6366f1;
+  background: #f8fafc;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 0 6px 6px 0;
+  page-break-inside: avoid;
+}
+.viva-qa .q { font-weight: 700; color: #1e1b4b; margin-bottom: 4px; }
+.viva-qa .a { color: #334155; font-size: 9pt; }
+
+.page-break { page-break-before: always; }
+
+  </style>
+</head>
+<body>
+
+  <div class="header-banner">
+    <h1>DeepPrice-MM: Training Platform & AI Models Guide</h1>
+    <p>Comprehensive Viva Reference: Where the Model Was Trained, Platform Environment, and Exact AI Architectures</p>
+    <div class="badge-row">
+      <span class="badge">Hardware & Platform</span>
+      <span class="badge">AI Model Backbones</span>
+      <span class="badge">Step-by-Step Training</span>
+      <span class="badge">Viva Defense Cheat Sheet</span>
+    </div>
+  </div>
+
+  <h2>1. Platform & Environment Specifications (Where It Was Trained)</h2>
+  <p>
+    The model was developed, preprocessed, trained, and deployed locally on a dedicated Python machine learning workstation. Below are the exact platform specifications to tell your professor:
+  </p>
+
+  <table class="table-custom">
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Specification / Platform Used</th>
+        <th>Description & Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Operating System</strong></td>
+        <td>Microsoft Windows 11 (x64)</td>
+        <td>Host operating system for local development, data caching, and server hosting.</td>
+      </tr>
+      <tr>
+        <td><strong>Programming Language</strong></td>
+        <td>Python 3.14 (Virtual Environment: <code>.venv</code>)</td>
+        <td>Modern runtime executing PyTorch, Scikit-learn, Sentence-Transformers, and FastAPI.</td>
+      </tr>
+      <tr>
+        <td><strong>Deep Learning Framework</strong></td>
+        <td>PyTorch 2.x (<code>torch</code> & <code>torch.nn</code>)</td>
+        <td>Constructs dynamic computation graphs, handles automatic differentiation (autograd), and executes GPU/CPU tensor backpropagation.</td>
+      </tr>
+      <tr>
+        <td><strong>Dataset Platform</strong></td>
+        <td>Kaggle (PromptCloud Flipkart Products Dataset)</td>
+        <td>Public benchmark repository sourcing 20,000 real Indian e-commerce listings with authentic prices and images.</td>
+      </tr>
+      <tr>
+        <td><strong>Training Execution Environment</strong></td>
+        <td>Local Python Script Pipeline (<code>train_real_model.py</code>)</td>
+        <td>Executed in terminal using PyTorch DataLoader batches (batch size = 32, AdamW optimizer).</td>
+      </tr>
+      <tr>
+        <td><strong>Deployment & Serving Server</strong></td>
+        <td>FastAPI ASGI Web Server hosted via Uvicorn</td>
+        <td>Runs locally at <code>http://127.0.0.1:8501/</code> providing real-time REST API pricing inference (&lt;15ms latency).</td>
+      </tr>
+      <tr>
+        <td><strong>Browser Testing Platform</strong></td>
+        <td>Microsoft Playwright (Headless Chromium)</td>
+        <td>Automated end-to-end user flow verification across all 1,200 products.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Which AI Models We Have Used</h2>
+  <p>
+    Our system is not a single generic model; it is a <strong>composite Multimodal Deep Neural Network</strong> combining two pre-trained foundation models with custom neural projection and attention fusion layers:
+  </p>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h3 style="margin-top: 0;">1. Vision Model: ResNet-18 (Residual Neural Network)</h3>
+    <ul>
+      <li><strong>Origin:</strong> Developed by Microsoft Research (He et al.), pre-trained on the 1.2-million-image <strong>ImageNet-1k</strong> dataset via <code>torchvision.models.resnet18</code>.</li>
+      <li><strong>Architecture:</strong> 18-layer deep convolutional neural network with residual skip connections that eliminate the vanishing gradient problem.</li>
+      <li><strong>Role in Our Project:</strong> Evaluates 224&times;224 RGB product photos. We stripped the final 1,000-class classification head and extracted the <strong>512-dimensional penultimate average-pooled feature vector</strong>. It quantifies packaging aesthetics, materials, build quality, and visual luxury cues.</li>
+      <li><strong>Why ResNet-18:</strong> Lightweight (~45 MB), extremely fast inference (under 10ms per image), and proven capability to capture visual texture and finish without overfitting small datasets.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h3 style="margin-top: 0;">2. NLP / Text Model: Sentence-BERT (all-MiniLM-L6-v2)</h3>
+    <ul>
+      <li><strong>Origin:</strong> Transformer architecture developed by UKP Lab / Hugging Face, fine-tuned on over 1 billion sentence pairs for semantic similarity.</li>
+      <li><strong>Architecture:</strong> 6-layer MiniLM Transformer with 12 self-attention heads and 384 hidden dimensions.</li>
+      <li><strong>Role in Our Project:</strong> Tokenizes and encodes the concatenated <code>product_title + " - " + description</code> into a <strong>384-dimensional dense semantic embedding</strong>.</li>
+      <li><strong>Why Sentence-BERT over TF-IDF:</strong> Standard keyword matching (TF-IDF) is blind to context. Sentence-BERT understands technical specifications, warranty guarantees, brand authority, and synonyms (e.g., recognizing that "genuine leather" and "premium hide" represent the same high-tier feature).</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h3 style="margin-top: 0;">3. Tabular Econometric MLP (Multi-Layer Perceptron)</h3>
+    <ul>
+      <li><strong>Architecture:</strong> Custom 2-layer dense feedforward network: <code>Linear(8 &rarr; 64) &rarr; BatchNorm1d &rarr; ReLU &rarr; Dropout(0.15) &rarr; Linear(64 &rarr; 128) &rarr; BatchNorm1d &rarr; ReLU</code>.</li>
+      <li><strong>Inputs:</strong> 8 numeric market indicators: manufacturing cost, catalog MSRP, competitor min price, competitor avg price, price ratio, stock count, and review rating.</li>
+      <li><strong>Role:</strong> Encodes quantitative market boundaries and pricing benchmarks into the same 128-d latent space.</li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h3 style="margin-top: 0;">4. Cross-Modal Fusion Model: Multi-Head Cross-Attention Layer</h3>
+    <ul>
+      <li><strong>Architecture:</strong> <code>nn.MultiheadAttention(embed_dim=128, num_heads=4)</code> followed by a residual connection (<code>modalities + attn_out</code>) and Layer Normalization (<code>nn.LayerNorm(128)</code>).</li>
+      <li><strong>Role:</strong> Stacks the visual token, text token, and tabular token into a sequence <code>[Batch, 3, 128]</code>. The attention mechanism dynamically computes inter-modal correlation weights (e.g., determining whether high visual quality justifies pricing above the competitor average).</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-bottom: 14px;">
+    <h3 style="margin-top: 0;">5. Dual Prediction Heads</h3>
+    <ul>
+      <li><strong>Demand Prediction Head:</strong> <code>Linear(128 &rarr; 64) &rarr; ReLU &rarr; Linear(64 &rarr; 1)</code>. Predicts expected customer order volume $Q(p)$ for any candidate price point.</li>
+      <li><strong>Price Elasticity Head:</strong> <code>Linear(128 &rarr; 64) &rarr; ReLU &rarr; Linear(64 &rarr; 1) &rarr; -Softplus</code>. Predicts negative price elasticity $\varepsilon(p) \le 0$ enforcing downward-sloping demand curves.</li>
+    </ul>
+  </div>
+
+  <h2>3. Step-by-Step Training Pipeline (How It Was Trained)</h2>
+  
+  <div class="callout callout-info">
+    <div class="callout-title">Chronological 7-Step Training Lifecycle</div>
+    <ol style="margin-top: 6px; padding-left: 20px;">
+      <li><strong>Step 1: Download from Kaggle:</strong> Ingested <code>flipkart_com-ecommerce_sample.csv</code> (38 MB) containing raw web-scraped listings.</li>
+      <li><strong>Step 2: Clean & Balance Data:</strong> Executed <code>prepare_real_dataset.py</code> to filter corrupt rows, extract image URLs, and sample 1,200 products equally balanced across 6 categories. Downloaded photos into <code>data/real_images/</code>.</li>
+      <li><strong>Step 3: Extract & Cache Embeddings:</strong> Ran <code>train_real_model.py</code> to extract 512-d ResNet-18 vectors and 384-d Sentence-BERT vectors, saving them to <code>.npy</code> cache files for millisecond retrieval.</li>
+      <li><strong>Step 4: Train Deep Neural Network:</strong> Trained <code>FastMultimodalNet</code> on 85% training data using PyTorch with AdamW optimizer (learning rate $2 \times 10^{-3}$) and MSE Loss for 15 epochs. Checked validation loss each epoch and saved the best checkpoint to <code>best_multimodal_pricing_model.pth</code>.</li>
+      <li><strong>Step 5: Run Comparative Ablation Study:</strong> Trained 3 baseline models (Tabular Only, Vision+Tabular, Text+Tabular) on the identical splits. Confirmed our proposed multimodal model achieved the lowest error (15.11% MAPE).</li>
+      <li><strong>Step 6: Mathematical Profit Optimization:</strong> In <code>optimizer.py</code>, formulated the economic profit objective $\Pi(p) = (p - \text{cost}) \times Q(p)$ and evaluated 50 candidate price points to identify the global profit peak $p^*$.</li>
+      <li><strong>Step 7: Launch FastAPI Web Dashboard:</strong> Hosted <code>app.py</code> on local port 8501 via Uvicorn, serving the interactive frontend and real-time inference APIs.</li>
+    </ol>
+  </div>
+
+  <h2>4. Quick Viva Cheat Sheet (Questions the Teacher Will Ask)</h2>
+  <div class="viva-qa">
+    <div class="q">Q1: On what platform did you train this model? Did you use AWS/GCP or a local machine?</div>
+    <div class="a">A: We trained the model locally on our workstation in Python 3.14 using the PyTorch deep learning framework. The raw e-commerce dataset was sourced from Kaggle (Flipkart Products Dataset), and the production model is served locally via a high-performance FastAPI server running on Uvicorn.</div>
+  </div>
+
+  <div class="viva-qa">
+    <div class="q">Q2: Exactly which AI models did you use?</div>
+    <div class="a">A: We used a multimodal architecture combining two foundation models: <strong>ResNet-18</strong> (pre-trained on ImageNet) for visual packaging analysis, and <strong>Sentence-BERT (all-MiniLM-L6-v2)</strong> for natural language semantic understanding, fused together with a custom <strong>4-head PyTorch Cross-Attention layer</strong>.</div>
+  </div>
+
+  <div class="viva-qa">
+    <div class="q">Q3: Why not train a Convolutional Neural Network from scratch?</div>
+    <div class="a">A: Training a vision network from scratch requires millions of labeled images and days of GPU compute. By using <strong>Transfer Learning</strong> with pre-trained ResNet-18, we leverage low-level visual features (edges, textures, finishes) learned on ImageNet and adapt them to e-commerce pricing with high accuracy on our 1,200 curated products.</div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Code Walkthrough: prepare_real_dataset.py</title>
+  <style>
+    
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm 16mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 9pt;
+    color: #64748b;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1e293b;
+  line-height: 1.6;
+  font-size: 10pt;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4 { color: #0f172a; font-weight: 800; margin-top: 1.4em; margin-bottom: 0.5em; page-break-after: avoid; }
+h1 { font-size: 20pt; line-height: 1.2; border-bottom: 2px solid #2563eb; padding-bottom: 6px; }
+h2 { font-size: 14pt; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; color: #1e3a8a; }
+h3 { font-size: 11.5pt; color: #2563eb; }
+h4 { font-size: 10.5pt; color: #334155; }
+
+p { margin-top: 0; margin-bottom: 0.8em; }
+
+.header-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  padding: 20px 24px;
+  border-radius: 10px;
+  margin-bottom: 22px;
+}
+.header-banner h1 { color: #ffffff; border: none; margin: 0 0 6px 0; padding: 0; font-size: 19pt; }
+.header-banner p { color: #cbd5e1; margin: 0; font-size: 10pt; }
+.header-banner .badge-row { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.header-banner .badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px 0;
+  font-size: 9pt;
+  page-break-inside: avoid;
+}
+.table-custom th, .table-custom td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  text-align: left;
+}
+.table-custom th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+}
+.table-custom tr:nth-child(even) { background-color: #f8fafc; }
+
+.callout {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 14px 0;
+  border-left: 4px solid;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+.callout-info { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; }
+.callout-viva { background: #fefce8; border-color: #eab308; color: #713f12; }
+.callout-success { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
+.callout-danger { background: #fef2f2; border-color: #dc2626; color: #991b1b; }
+
+.callout-title {
+  font-weight: 800;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  font-size: 8.5pt;
+  letter-spacing: 0.5px;
+}
+
+pre, code {
+  font-family: 'Fira Code', Consolas, monospace;
+}
+code {
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  font-size: 8.5pt;
+  border: 1px solid #e2e8f0;
+}
+pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 8.2pt;
+  overflow-x: auto;
+  line-height: 1.45;
+  margin: 12px 0 16px 0;
+  page-break-inside: avoid;
+  border: 1px solid #334155;
+}
+
+.code-title {
+  background: #1e293b;
+  color: #94a3b8;
+  font-family: 'Fira Code', monospace;
+  font-size: 8pt;
+  padding: 4px 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin-bottom: -12px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.card {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.viva-term {
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+}
+.viva-term strong {
+  color: #9a3412;
+  font-size: 9.5pt;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.viva-qa {
+  border-left: 3px solid #6366f1;
+  background: #f8fafc;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 0 6px 6px 0;
+  page-break-inside: avoid;
+}
+.viva-qa .q { font-weight: 700; color: #1e1b4b; margin-bottom: 4px; }
+.viva-qa .a { color: #334155; font-size: 9pt; }
+
+.page-break { page-break-before: always; }
+
+  </style>
+</head>
+<body>
+  
+<div class="header-banner">
+  <h1>Code Walkthrough: prepare_real_dataset.py</h1>
+  <p>Automated Ingestion, Data Cleaning, Image CDN Fetching, and Stratified Sampling</p>
+  <div class="badge-row">
+    <span class="badge">Data Pipeline</span>
+    <span class="badge">Multi-Threading</span>
+    <span class="badge">Image Processing</span>
+  </div>
+</div>
+
+<h2>1. File Purpose & Role</h2>
+<p>
+  This script is the <strong>data acquisition and preprocessing pipeline</strong>. It transforms 20,000 raw, noisy, unstructured Flipkart e-commerce web crawl records into a clean, multimodal dataset of 1,200 verified products balanced across 6 retail categories, downloading their real photos into standard RGB images.
+</p>
+
+<h2>2. Libraries Used and Technical Justification</h2>
+<table class="table-custom">
+  <thead>
+    <tr>
+      <th>Library</th>
+      <th>Imported Items</th>
+      <th>Purpose in Script</th>
+      <th>Why Chosen Over Alternatives</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>pandas</code></td>
+      <td><code>import pandas as pd</code></td>
+      <td>Loading CSV, filtering nulls, price validation, category grouping, and saving clean master dataset.</td>
+      <td>Standard vectorized tabular library in Python; far faster than manual CSV parsing.</td>
+    </tr>
+    <tr>
+      <td><code>PIL (Pillow)</code></td>
+      <td><code>from PIL import Image</code></td>
+      <td>Opening downloaded images, validating integrity, converting color modes to RGB, and standardizing dimensions.</td>
+      <td>De facto standard Python imaging library; avoids heavyweight OpenCV dependencies for basic image ingestion.</td>
+    </tr>
+    <tr>
+      <td><code>concurrent.futures</code></td>
+      <td><code>ThreadPoolExecutor, as_completed</code></td>
+      <td>Concurrent parallel downloading of 1,200 product images across multiple web threads.</td>
+      <td>Speeds up downloading by ~10x over sequential downloading without complex asyncio setups.</td>
+    </tr>
+    <tr>
+      <td><code>urllib.request</code></td>
+      <td><code>import urllib.request</code></td>
+      <td>Issuing HTTP GET requests with custom User-Agent headers to fetch live image assets from CDN.</td>
+      <td>Native built-in Python library requiring zero external package installations.</td>
+    </tr>
+    <tr>
+      <td><code>re</code> & <code>json</code></td>
+      <td><code>import re, json</code></td>
+      <td>Parsing stringified JSON arrays of image URLs in raw Flipkart dataset columns.</td>
+      <td>Handles both valid JSON arrays and malformed URL strings with regex fallback.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3. Detailed Block-by-Block Code Walkthrough</h2>
+
+<div class="card">
+  <div class="code-title">prepare_real_dataset.py (Lines 18-28)</div>
+  <pre><code># Filtering valid price rows
+df = df.dropna(subset=['retail_price', 'discounted_price', 'product_name', 'description', 'image'])
+df['retail_price'] = pd.to_numeric(df['retail_price'], errors='coerce')
+df['discounted_price'] = pd.to_numeric(df['discounted_price'], errors='coerce')
+df = df.dropna(subset=['retail_price', 'discounted_price'])
+df = df[(df['retail_price'] >= 200) & (df['discounted_price'] >= 150) & (df['retail_price'] <= 100000)]
+df = df[df['retail_price'] >= df['discounted_price']] # MSRP >= Discounted Price</code></pre>
+  <p><strong>Explanation:</strong> This block enforces real-world retail logic: it coerces string prices into floating-point numbers, eliminates non-numeric entries, drops rows where MSRP or discounted price is missing, and ensures retail MSRP is strictly greater than or equal to the discounted selling price.</p>
+</div>
+
+<div class="card" style="margin-top: 14px;">
+  <div class="code-title">prepare_real_dataset.py (Lines 43-62)</div>
+  <pre><code>def extract_main_category(cat_str):
+    cleaned = cat_str.strip("["'] ")
+    parts = [p.strip() for p in cleaned.split(">>")]
+    main_cat = parts[0] if len(parts) > 0 else "General"
+    if any(k in main_cat for k in ["Mobile", "Tablet", "Electronic"]):
+        return "Mobiles & Tech"
+    elif any(k in main_cat for k in ["Watch"]):
+        return "Watches & Wearables"
+    # ... mapped into 6 balanced domains</code></pre>
+  <p><strong>Explanation:</strong> Raw e-commerce catalogs contain hierarchical breadcrumb strings (e.g. <code>Clothing >> Women's >> Western Wear</code>). This function parses breadcrumbs into 6 distinct, well-balanced retail domains to prevent domain bias during training.</p>
+</div>
+
+<div class="card" style="margin-top: 14px;">
+  <div class="code-title">prepare_real_dataset.py (Lines 99-138)</div>
+  <pre><code>with ThreadPoolExecutor(max_workers=16) as executor:
+    futures = [executor.submit(download_image, task) for task in download_tasks]
+    for future in as_completed(futures):
+        res = future.result()</code></pre>
+  <p><strong>Explanation:</strong> Uses a 16-worker thread pool to download images simultaneously with a 6-second timeout. If a remote CDN link has expired, it falls back to a clean category placeholder image so the pipeline never crashes.</p>
+</div>
+
+<h2>4. Important Viva Terms to Highlight</h2>
+<div class="viva-term">
+  <strong>Stratified Sampling</strong>
+  <span>Selecting an equal number of samples (200 SKUs) from each category so the neural network does not become biased toward high-volume categories like clothing or cables.</span>
+</div>
+<div class="viva-term">
+  <strong>ThreadPoolExecutor vs ProcessPoolExecutor</strong>
+  <span>Threads are ideal for I/O-bound tasks (downloading images from network), while processes are used for CPU-bound tasks (matrix math, training neural networks).</span>
+</div>
+
+<h2>5. Likely Viva Questions & Answers</h2>
+<div class="viva-qa">
+  <div class="q">Q: Why did you filter out items below ₹200 or above ₹1,00,000?</div>
+  <div class="a">A: Extremely cheap products (e.g., ₹5 screen guards) and extreme luxury goods (₹5,00,000 jewelry) introduce heavy statistical skew in price elasticity. Restricting to ₹200-₹1,00,000 focuses the model on standard consumer e-commerce goods.</div>
+</div>
+
+</body>
+</html>
