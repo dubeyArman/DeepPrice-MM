@@ -24,13 +24,14 @@ To prevent non-monotonic neural hallucinations, DeepPrice-MM implements an **Eco
 
 ---
 
-## 📁 PPT AND REPORT (Presentation & Report)
+## 📁 PPT AND REPORT (Presentation & Reports)
 
 The dedicated [`PPT AND REPORT/`](./PPT%20AND%20REPORT/) folder contains:
 
 | File | Type | Description | Link |
 | :--- | :---: | :--- | :--- |
 | **`DeepPrice_8_Slides_Presentation.pptx`** | **Presentation** | **Summarized 8-Slide Presentation Deck** covering problem statement, tri-modal architecture, attention fusion, dataset, monotonic elasticity, 15.1% MAPE ablation benchmark, web app, and viva defense. | [**View PPTX**](./PPT%20AND%20REPORT/DeepPrice_8_Slides_Presentation.pptx) |
+| **`DeepPrice_Project_Report.docx`** | **Report (Word)** | **Microsoft Word Project Report** (.docx) with complete team enrollment, benchmark tables, and viva defense guide. | [**Download DOCX**](./PPT%20AND%20REPORT/DeepPrice_Project_Report.docx) |
 | **`DeepPrice_Project_Report.pdf`** | **Report (PDF)** | **Comprehensive Technical Project Report** formatted and styled with architecture diagrams, formulas, 4-model benchmarks, Pearson heatmap, and viva Q&A. | [**Download PDF**](./PPT%20AND%20REPORT/DeepPrice_Project_Report.pdf) |
 | **`README.md`** | **Report (Markdown)** | Full readable GitHub-native technical project report rendered directly on GitHub. | [**Read Online**](./PPT%20AND%20REPORT/README.md) |
 
@@ -228,9 +229,9 @@ DeepPrice-MM/
 
 ---
 
-## 👨‍💻 Author & Contact
+## 👥 Project Team Members
 
-- **Lead Developer & Researcher:** Arman Dubey
+- **Arman Dubey** — Enrollment: **S25CSEU1315**
+- **Darshan Pingale** — Enrollment: **S25CSEU1307**
 - **GitHub:** [@dubeyArman](https://github.com/dubeyArman)
-- **Email:** [Dubeyarman834@gmail.com](mailto:Dubeyarman834@gmail.com)
 - **Domain:** Multimodal Deep Learning, E-Commerce Pricing Intelligence, Microeconomic Optimization

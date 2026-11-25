@@ -150,24 +150,28 @@ p_desc.space_before = Pt(10)
 
 # Metadata Cards at bottom
 meta_y = 4.8
-add_card(s1, 1.3, meta_y, 3.3, 1.3, bg_color=CARD_BG, border_color=CARD_BORDER)
-tb_m1 = s1.shapes.add_textbox(Inches(1.45), Inches(meta_y + 0.15), Inches(3.0), Inches(1.0))
+add_card(s1, 1.1, meta_y, 3.6, 1.3, bg_color=CARD_BG, border_color=CARD_BORDER)
+tb_m1 = s1.shapes.add_textbox(Inches(1.25), Inches(meta_y + 0.12), Inches(3.3), Inches(1.1))
 tf_m1 = tb_m1.text_frame
+tf_m1.word_wrap = True
 p = tf_m1.paragraphs[0]
-p.text = "Lead Developer & Researcher"
+p.text = "Project Team Members"
 p.font.size = Pt(10)
 p.font.color.rgb = TEXT_MUTED
 p2 = tf_m1.add_paragraph()
-p2.text = "Arman Dubey"
-p2.font.size = Pt(14)
+p2.text = "Arman Dubey — S25CSEU1315"
+p2.font.size = Pt(11.5)
 p2.font.bold = True
 p2.font.color.rgb = TEXT_LIGHT
+p2.space_before = Pt(3)
 p3 = tf_m1.add_paragraph()
-p3.text = "Dubeyarman834@gmail.com"
-p3.font.size = Pt(9.5)
+p3.text = "Darshan Pingale — S25CSEU1307"
+p3.font.size = Pt(11.5)
+p3.font.bold = True
 p3.font.color.rgb = BLUE_ACCENT
+p3.space_before = Pt(2)
 
-add_card(s1, 4.8, meta_y, 3.3, 1.3, bg_color=CARD_BG, border_color=CARD_BORDER)
+add_card(s1, 4.9, meta_y, 3.3, 1.3, bg_color=CARD_BG, border_color=CARD_BORDER)
 tb_m2 = s1.shapes.add_textbox(Inches(4.95), Inches(meta_y + 0.15), Inches(3.0), Inches(1.0))
 tf_m2 = tb_m2.text_frame
 p = tf_m2.paragraphs[0]

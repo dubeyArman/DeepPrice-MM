@@ -117,25 +117,30 @@ p.space_before = Pt(10)
 
 # Bottom Info Cards
 y_c = 4.7
-add_card(s1, 1.3, y_c, 3.4, 1.4, bg_color=CARD_BG, border_color=CARD_BORDER)
-tb = s1.shapes.add_textbox(Inches(1.45), Inches(y_c + 0.15), Inches(3.1), Inches(1.1))
+add_card(s1, 1.1, y_c, 3.7, 1.4, bg_color=CARD_BG, border_color=CARD_BORDER)
+tb = s1.shapes.add_textbox(Inches(1.25), Inches(y_c + 0.12), Inches(3.4), Inches(1.16))
 tf = tb.text_frame
-tf.paragraphs[0].text = "Lead Developer & Researcher"
+tf.word_wrap = True
+tf.paragraphs[0].text = "Project Team Members"
 tf.paragraphs[0].font.size = Pt(10)
 tf.paragraphs[0].font.color.rgb = TEXT_MUTED
 p = tf.add_paragraph()
-p.text = "Arman Dubey"
-p.font.size = Pt(15)
+p.text = "Arman Dubey — S25CSEU1315"
+p.font.size = Pt(11.5)
 p.font.bold = True
 p.font.color.rgb = TEXT_LIGHT
-p = tf.add_paragraph()
-p.text = "Dubeyarman834@gmail.com"
-p.font.size = Pt(10)
-p.font.color.rgb = BLUE_ACCENT
+p.space_before = Pt(4)
+p2 = tf.add_paragraph()
+p2.text = "Darshan Pingale — S25CSEU1307"
+p2.font.size = Pt(11.5)
+p2.font.bold = True
+p2.font.color.rgb = BLUE_ACCENT
+p2.space_before = Pt(3)
 
-add_card(s1, 4.95, y_c, 3.4, 1.4, bg_color=CARD_BG, border_color=CARD_BORDER)
-tb = s1.shapes.add_textbox(Inches(5.1), Inches(y_c + 0.15), Inches(3.1), Inches(1.1))
+add_card(s1, 5.0, y_c, 3.4, 1.4, bg_color=CARD_BG, border_color=CARD_BORDER)
+tb = s1.shapes.add_textbox(Inches(5.15), Inches(y_c + 0.12), Inches(3.1), Inches(1.16))
 tf = tb.text_frame
+tf.word_wrap = True
 tf.paragraphs[0].text = "Technology Stack"
 tf.paragraphs[0].font.size = Pt(10)
 tf.paragraphs[0].font.color.rgb = TEXT_MUTED
@@ -144,12 +149,14 @@ p.text = "PyTorch • S-BERT • ResNet-18"
 p.font.size = Pt(13)
 p.font.bold = True
 p.font.color.rgb = TEXT_LIGHT
+p.space_before = Pt(4)
 p = tf.add_paragraph()
 p.text = "FastAPI • Bootstrap 5 • Chart.js"
 p.font.size = Pt(10)
 p.font.color.rgb = INDIGO_ACC
+p.space_before = Pt(3)
 
-add_card(s1, 8.6, y_c, 3.4, 1.4, bg_color=CARD_BG, border_color=CARD_BORDER)
+add_card(s1, 8.6, y_c, 3.6, 1.4, bg_color=CARD_BG, border_color=CARD_BORDER)
 tb = s1.shapes.add_textbox(Inches(8.75), Inches(y_c + 0.15), Inches(3.1), Inches(1.1))
 tf = tb.text_frame
 tf.paragraphs[0].text = "Empirical Benchmark"
