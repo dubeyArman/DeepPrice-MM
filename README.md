@@ -24,13 +24,25 @@ To prevent non-monotonic neural hallucinations, DeepPrice-MM implements an **Eco
 
 ---
 
-## 📊 Presentation Deck & Documentation
+## 📁 Presentation Deck & Comprehensive Reports
 
-- 📑 **Comprehensive Presentation Deck (`.pptx`):** [`DeepPrice_Multimodal_Dynamic_Pricing_Presentation.pptx`](./DeepPrice_Multimodal_Dynamic_Pricing_Presentation.pptx)  
+All evaluation materials, executive slides, research papers, and technical reports are consolidated in the dedicated [`PPT AND REPORT/`](./PPT%20AND%20REPORT/) folder:
+
+- 📑 **PowerPoint Presentation Deck (`.pptx`):** [`PPT AND REPORT/DeepPrice_Multimodal_Dynamic_Pricing_Presentation.pptx`](./PPT%20AND%20REPORT/DeepPrice_Multimodal_Dynamic_Pricing_Presentation.pptx)  
   *14 executive-grade widescreen slides designed for academic evaluation, teacher viva, and business stakeholder reviews.*
-- 📄 **Master Architecture & Theory PDF:** [`docs_pdf/DeepPrice_Master_Model_Documentation.pdf`](./docs_pdf/DeepPrice_Master_Model_Documentation.pdf)
-- 📖 **Platform & AI Models Guide PDF:** [`docs_pdf/DeepPrice_Platform_and_AI_Models_Guide.pdf`](./docs_pdf/DeepPrice_Platform_and_AI_Models_Guide.pdf)
-- 🔍 **Interactive Code Walkthrough PDFs:** Located in the [`docs_pdf/`](./docs_pdf/) directory covering every Python module.
+- 📝 **Master Project Report:** [`PPT AND REPORT/PROJECT_REPORT.md`](./PPT%20AND%20REPORT/PROJECT_REPORT.md)  
+  *Comprehensive report covering abstract, microeconomic formulations, multi-task loss, ablation results, and viva defense.*
+- 📄 **Full Conference Research Paper (PDF):** [`PPT AND REPORT/DeepPrice_Multimodal_Conference_Paper.pdf`](./PPT%20AND%20REPORT/DeepPrice_Multimodal_Conference_Paper.pdf)
+- 📝 **Conference Research Paper (Word DOCX):** [`PPT AND REPORT/DeepPrice_Multimodal_Conference_Paper.docx`](./PPT%20AND%20REPORT/DeepPrice_Multimodal_Conference_Paper.docx)
+- 📘 **Master Architecture & Theory Guide (PDF):** [`PPT AND REPORT/DeepPrice_Master_Model_Documentation.pdf`](./PPT%20AND%20REPORT/DeepPrice_Master_Model_Documentation.pdf)
+- 📗 **Platform & AI Models Manual (PDF):** [`PPT AND REPORT/DeepPrice_Platform_and_AI_Models_Guide.pdf`](./PPT%20AND%20REPORT/DeepPrice_Platform_and_AI_Models_Guide.pdf)
+- 🔍 **Interactive Code Walkthroughs (PDFs):**
+  - [`Code_Walkthrough_multimodal_pricing_net.pdf`](./PPT%20AND%20REPORT/Code_Walkthrough_multimodal_pricing_net.pdf)
+  - [`Code_Walkthrough_optimizer.pdf`](./PPT%20AND%20REPORT/Code_Walkthrough_optimizer.pdf)
+  - [`Code_Walkthrough_train_real_model.pdf`](./PPT%20AND%20REPORT/Code_Walkthrough_train_real_model.pdf)
+  - [`Code_Walkthrough_prepare_real_dataset.pdf`](./PPT%20AND%20REPORT/Code_Walkthrough_prepare_real_dataset.pdf)
+  - [`Code_Walkthrough_app.pdf`](./PPT%20AND%20REPORT/Code_Walkthrough_app.pdf)
+  - [`Code_Walkthrough_test_browser_interaction.pdf`](./PPT%20AND%20REPORT/Code_Walkthrough_test_browser_interaction.pdf)
 
 ---
 
